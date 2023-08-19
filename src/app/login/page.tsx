@@ -2,18 +2,37 @@
 
 import React from "react"
 import Link from "next/link"
+import axios from "axios"
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+    const router = useRouter()
 
     const [user, setUser] = React.useState({
         email: '',
         password: ''
     })
+    const [loading, setLoading] = React.useState(false)
+
+    const onLogin = async () => {
+        try {
+            setLoading(true)
+            const response = await axios.post("/api/users/login", user)
+            console.log("Login success", response.data)
+            router.push('/profile')
+
+        } catch (error: any) {
+            console.log(error.message)
+        }
+        finally{
+            setLoading(false)
+        }
+    }
 
     return (
 
         <div className="w-9/12 mx-auto mt-20">
-            <h1 className="text-center text-4xl font-semibold">Login</h1>
+            <h1 className="text-center text-4xl font-semibold">{loading ? 'Processing...' : 'Login'}</h1>
             <div className="relative z-0 w-full mb-6 group">
                 <input
                     value={user.email}
@@ -31,7 +50,7 @@ export default function LoginPage() {
             <div className="w-fit hover:underline mb-5">
                 <Link href='/signUp'><p>New to this site?</p></Link>
             </div>
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+            <button onClick={onLogin} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
         </div>
 
     )
