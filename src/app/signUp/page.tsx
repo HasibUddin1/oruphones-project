@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "react-hot-toast";
 
 export default function SignUpPage() {
 
@@ -22,9 +23,11 @@ export default function SignUpPage() {
             setLoading(true)
             const response = await axios.post("/api/users/signUp", user);
             console.log("Sign up success", response.data)
+            toast.success("Successfully created an account")
             router.push("/login")
         } catch (error: any) {
             console.log(error.message)
+            toast.error(error.message)
         }
         finally {
             setLoading(false)
