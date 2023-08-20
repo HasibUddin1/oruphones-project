@@ -3,6 +3,7 @@
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import React from "react"
+import { toast } from "react-hot-toast"
 
 
 export default function ProfilePage() {
@@ -15,6 +16,7 @@ export default function ProfilePage() {
         try {
             await axios.get("/api/users/logOut")
             console.log("Log out successful")
+            toast.success("Successfully logged out")
             router.push("/login")
         } catch (error: any) {
             console.log(error.message)
